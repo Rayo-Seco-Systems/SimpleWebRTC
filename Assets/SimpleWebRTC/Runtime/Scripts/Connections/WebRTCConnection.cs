@@ -25,6 +25,7 @@ namespace SimpleWebRTC
         [SerializeField] private string StunServerAddress = "stun:stun.l.google.com:19302";
         [SerializeField] private string LocalPeerId = "PeerId";
         [SerializeField] private string roomId;
+        [SerializeField] private string jwtToken;
         [SerializeField] private bool UseHTTPHeader = true;
         [SerializeField] private bool IsVideoAudioSender = true;
         [SerializeField] private bool IsVideoAudioReceiver = true;
@@ -65,8 +66,10 @@ namespace SimpleWebRTC
         private AudioStreamTrack audioStreamTrack;
 
         public string RoomId => roomId;
+        public string JwtToken => jwtToken;
 
         public void SetRoomId(string roomId) => this.roomId = roomId;
+        public void SetJwtToken(string jwtToken) => this.jwtToken = jwtToken;
 
         private void Awake()
         {
@@ -100,7 +103,7 @@ namespace SimpleWebRTC
                 SimpleWebRTCLogger.EnableLogging = ShowLogs;
             }
 
-            ConnectClient(roomId);
+            ConnectClient(roomId, jwtToken);
 
             if (!WebSocketConnectionActive && IsWebSocketConnected)
             {
@@ -163,7 +166,7 @@ namespace SimpleWebRTC
 
         private void OnEnable()
         {
-            ConnectClient(roomId);
+            ConnectClient(roomId, jwtToken);
         }
 
         private void OnDisable()
@@ -199,11 +202,11 @@ namespace SimpleWebRTC
             return new string(nameChars) + "-PeerId";
         }
 
-        private void ConnectClient(string roomId = "")
+        private void ConnectClient(string roomId = "", string jwtToken = "")
         {
             if (WebSocketConnectionActive && !ConnectionToWebSocketInProgress && !IsWebSocketConnected)
             {
-                webRTCManager.Connect(WebSocketServerAddress, UseHTTPHeader, IsVideoAudioSender, IsVideoAudioReceiver, roomId);
+                webRTCManager.Connect(WebSocketServerAddress, UseHTTPHeader, IsVideoAudioSender, IsVideoAudioReceiver, roomId, jwtToken);
             }
         }
 

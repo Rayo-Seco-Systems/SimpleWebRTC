@@ -46,7 +46,7 @@ namespace SimpleWebRTC
             this.connectionGameObject = connectionObject;
         }
 
-        public async void Connect(string webSocketUrl, bool useHTTPHeader = true, bool isVideoAudioSender = true, bool isVideoAudioReceiver = true, string roomId = "")
+        public async void Connect(string webSocketUrl, bool useHTTPHeader = true, bool isVideoAudioSender = true, bool isVideoAudioReceiver = true, string roomId = "", string jwtToken = "")
         {
 
             IsWebSocketConnectionInProgress = true;
@@ -57,7 +57,7 @@ namespace SimpleWebRTC
             {
                 // using header data using e.g. glitch.com, or without header using e.g. repl.it
                 ws = (useHTTPHeader
-                    ? new WebSocket(webSocketUrl, new Dictionary<string, string>() { { "user-agent", "unity webrtc" }, { "x-room-id", roomId } })
+                    ? new WebSocket(webSocketUrl, new Dictionary<string, string>() { { "user-agent", "unity webrtc" }, { "x-room-id", roomId }, { "authorization", $"Bearer {jwtToken}" } })
                     : new WebSocket(webSocketUrl));
 
                 ws.OnOpen += () =>
